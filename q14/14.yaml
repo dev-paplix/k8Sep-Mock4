@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: httpd
+  name: httpd
+  namespace: qq8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpd
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: httpd
+    spec:
+      containers:
+      - image: traefik/whoami
+        name: whoami
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
+

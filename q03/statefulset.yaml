@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-svc
+  labels:
+    app: database-svc
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None
+  selector:
+    app: database
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+spec:
+  selector:
+    matchLabels:
+      app: database # has to match .spec.template.metadata.labels
+  serviceName: "database-svc"
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0
+  template:
+    metadata:
+      labels:
+        app: database # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+          name: mongoPort
+        volumeMounts:
+        - name: mongo
+          mountPath: /etc/mongo
+      volumeClaimTemplates:
+      - metadata:
+          name: mongo
+        spec:
+          accessModes: [ "ReadWriteOnce" ]
+          storageClassName: "my-storage-class"
+          resources:
+            requests:
+              storage: 3Gi
+      - name: mongo-e
+        image: mongo-express:latest                   
+        ports:
+        - containerPort: 80
+          name: mongoE-port
+        volumeMounts:
+        - name: mongoE
+          mountPath: 
+      volumeClaimTemplates:
+      - metadata:
+          name: mongoE
+        spec:
+          accessModes: [ "ReadWriteOnce" ]
+          storageClassName: "my-storage-class"
+          resources:
+            requests:
+              storage: 3Gi
+        env:
+          - name: ME_CONFIG_MONGODB_URL
+            valueFrom:
+              configMapKeyRef:
+                name: configmapdb
+                key: ME_CONFIG_MONGODB_URL
+          - name: ME_CONFIG_BASICAUTH  
+            valueFrom:
+              configMapKeyRef:
+                name: configmapdb
+                key: ME_CONFIG_BASICAUTH
+          - name: MONGO_INITDB_ROOT_USERNAME  
+            valueFrom:
+              secretKeyRef:
+                name: secretdb
+                key: MONGO_INITDB_ROOT_USERNAME
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secretdb 
+                key: MONGO_INITDB_ROOT_PASSWORD
+          - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+            valueFrom:
+              secretKeyRef:
+                name: secretdb
+                key: ME_CONFIG_MONGODB_ADMINUSERNAME
+          - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secretdb
+                key: ME_CONFIG_MONGODB_ADMINPASSWORD
