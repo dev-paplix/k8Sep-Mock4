@@ -1,0 +1,58 @@
+openssl genrsa -out examinee.key 2048
+
+openssl req -new -key examinee.key -out examinee.csr -subj "/CN=examinee/O=dev/O=example.org"
+
+openssl x509 -req -CA  /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -days 730 -in examinee.csr -out examinee.crt
+
+kubectl config set-credentials examinee --client-certificate=examinee.crt --client-key=examinee.key
+kubectl config set-context examinee-kubernetes --cluster=kubernetes --user=examinee --namespace=examinee
+kubectl config get-contexts
+kubectl config use-context
+kubectl api-resources -o wide | grep pod
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: examinee
+  namespace: examinee
+rules:
+- apiGroups: ["","storage.k8s.io", "apps"]
+  resources: ["pods", "deployments"]
+  verbs: ["get", "watch", "list", "create", "logs", "describe"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: examinee-binding
+  namespace: examinee
+subjects:
+- kind: User         
+  name: examinee
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: examinee
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache
+  namespace: examinee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+      - name: apache-container
+        image: httpd:latest
+        ports:
+        - containerPort: 80

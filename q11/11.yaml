@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: realtime
+  namespace: qq6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: realtime
+  template:
+    metadata:
+      labels:
+        app: realtime
+    spec:
+      containers:
+      - name: redis
+        image: redis:latest
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "500Mi"
+          limits:
+            cpu: "0.5"
+            memory: "500Mi"
+        ports:
+        - containerPort: 6379
