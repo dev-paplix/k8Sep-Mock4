@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  namespace: qq2
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
       app: nginx
@@ -15,8 +16,5 @@ spec:
       containers:
       - name: nginx
         image: nginx
-      tolerations:
-      - key: "key1"
-        operator: "Equal"
-        value: "value1"
-        effect: "NoSchedule"
+        ports:
+        - containerPort: 80
