@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  namespace: examinee
+  name: examinee
+rules:
+- apiGroups: ["", "apps", "extensions"]
+  resources: ["pods", "deployments", "services"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]
