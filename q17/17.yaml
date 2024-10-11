@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: qq10
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80 # Exposing port 80 of the container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: qq10
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80         # Exposing port 80 on the service
+    targetPort: 80   # Forwarding to container port 80
+  selector:
+    app: nginx
