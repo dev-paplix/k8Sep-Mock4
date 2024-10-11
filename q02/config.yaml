@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+data:
+  ME_CONFIG_MONGODB_URL: "mongodb://root:example@mongo:27017/"
+  ME_CONFIG_BASICAUTH: "false"
