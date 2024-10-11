@@ -1,0 +1,116 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-storage-class
+provisioner: k8s.io/minikube-hostpath
+parameters:
+  type: pd-ssd
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-configmap
+data:
+  ME_CONFIG_MONGODB_URL: "mongodb://root:example@mongo:27017/"
+  ME_CONFIG_BASICAUTH: "false"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-secret
+type: Opaque
+data:
+  MONGO_INITDB_ROOT_USERNAME: cm9vdA== #root
+  MONGO_INITDB_ROOT_PASSWORD: ZXhhbXBsZQ== #example
+  ME_CONFIG_MONGODB_ADMINUSERNAME: cm9vdA==
+  ME_CONFIG_MONGODB_ADMINPASSWORD: ZXhhbXBsZQ==
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: qq3
+spec:
+  serviceName: "mongo-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      tolerations:
+        - key: "key1"
+          operator: "Equal"
+          value: "value1"
+          effect: "NoSchedule"
+      containers:
+        - name: mongo
+          image: mongo
+          ports:
+            - containerPort: 27017
+              name: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          volumeMounts:
+            - name: mongo-sts
+              mountPath: /etc/mongo
+        - name: mongo-express
+          image: mongo-express
+          ports:
+            - containerPort: 8081
+              name: mongo-express
+          env:
+            - name: ME_CONFIG_MONGODB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-configmap
+                  key: ME_CONFIG_MONGODB_URL
+            - name: ME_CONFIG_BASICAUTH
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-configmap
+                  key: ME_CONFIG_BASICAUTH
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
+          volumeMounts:
+            - name: mongo-express-sts
+              mountPath: /etc/mongo
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-sts
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: my-storage-class
+        resources:
+          requests:
+            storage: 3Gi
+    - metadata:
+        name: mongo-express-sts
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: my-storage-class
+        resources:
+          requests:
+            storage: 3Gi
