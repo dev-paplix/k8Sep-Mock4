@@ -1,4 +1,4 @@
-Name:
+Name: Muhammad Ikhmal Haziq bin Amar
 
 Q1:
 
@@ -110,5 +110,3 @@ Take a screenshot of the pod echoing 'Hello Alpine'
 Q17:
 
 Create a deployment with 2 replicas from nginx:latest image in qq10 namespace. Make it available globally in whatever port randomly chosen. 
-
-
