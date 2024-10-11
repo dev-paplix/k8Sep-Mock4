@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-deployment
+  labels:
+    app: http-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-deployment
+  template:
+    metadata:
+      labels:
+        app: http-deployment
+    spec:
+      containers:
+      - name: traefik
+        image: traefik
+        ports:
+        - containerPort: 80
