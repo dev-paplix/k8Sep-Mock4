@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-multiple
+spec:
+  capacity:
+    storage: 10Gi
+  #volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: multiple
+  hostPath:
+    path: /any/path/it/will/be/replaced
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: multiple-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+ # volumeMode: Block
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: pv-multiple
+
+  ---
+
+  apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: multiple-pvc
+      volumes:
+      - name: multiple-pvc
+        persistentVolumeClaim:
+          claimName: claim-pvc
