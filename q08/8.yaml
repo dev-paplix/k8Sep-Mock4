@@ -1,0 +1,47 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: examinee
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log", "pods/exec", "services", "deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]
+
+//binding
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: examinee-binding
+subjects:
+- kind: Group
+  name: system:serviceaccounts
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: examinee
+  apiGroup: rbac.authorization.k8s.io
+
+
+//deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apache
+  namespace: examinee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apache
+  template:
+    metadata:
+      labels:
+        app: apache
+    spec:
+      containers:
+      - name: apache
+        image: httpd
+        ports:
+        - containerPort: 80
