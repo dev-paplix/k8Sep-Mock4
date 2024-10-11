@@ -1,4 +1,4 @@
-Name:
+Name: Syafiq Haikal
 
 Q1:
 
