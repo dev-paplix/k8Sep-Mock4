@@ -1,3 +1,34 @@
+# PersistentVolume for MongoDB
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+  namespace: qq3
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/mongo  # Adjust this path based on your cluster setup
+
+---
+
+# PersistentVolumeClaim for MongoDB
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+  namespace: qq3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+
+---
+
 # ConfigMap for Mongo-Express
 apiVersion: v1
 kind: ConfigMap
@@ -18,9 +49,8 @@ metadata:
   namespace: qq3
 type: Opaque
 stringData:
-  MONGO_INITDB_ROOT_USERNAME: test         # Example username
-  MONGO_INITDB_ROOT_PASSWORD: test         # Example password
-
+  MONGO_INITDB_ROOT_USERNAME: test
+  MONGO_INITDB_ROOT_PASSWORD: test
 ---
 
 # Service for Mongo StatefulSet
@@ -38,7 +68,6 @@ spec:
   clusterIP: None
   selector:
     app: mongo
-
 ---
 
 # StatefulSet for Mongo and Mongo-Express
@@ -51,7 +80,6 @@ spec:
   serviceName: "mongo"
   replicas: 1
   selector:
-   selector:
     matchLabels:
       app: mongo
   template:
@@ -77,6 +105,9 @@ spec:
             secretKeyRef:
               name: mongo-secret
               key: MONGO_INITDB_ROOT_PASSWORD
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /etc/mongo
       - name: mongo-express
         image: mongo-express
         ports:
@@ -89,17 +120,24 @@ spec:
               name: mongo-express-config
               key: ME_CONFIG_MONGODB_URL
         - name: ME_CONFIG_BASICAUTH
-          valueFrom:
+        valueFrom:
             configMapKeyRef:
               name: mongo-express-config
               key: ME_CONFIG_BASICAUTH
-        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+       - name: ME_CONFIG_MONGODB_ADMINUSERNAME
           valueFrom:
             secretKeyRef:
               name: mongo-secret
               key: MONGO_INITDB_ROOT_USERNAME
-        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+       - name: ME_CONFIG_MONGODB_ADMINPASSWORD
           valueFrom:
             secretKeyRef:
               name: mongo-secret
               key: MONGO_INITDB_ROOT_PASSWORD
+      volumeMounts:
+        - name: mongo-storage
+          mountPath: /etc/mongo
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc
