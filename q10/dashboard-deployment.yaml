@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: qq5
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+      - name: drupal
+        image: drupal:10.2.7-php8.2-fpm-bookworm
+        ports:
+        - containerPort: 80

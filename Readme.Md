@@ -2,11 +2,11 @@ Name:
 
 Q1:
 
-Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node.
+Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node. <done>
 
 Q2:
 
-Create a StatefulSet named database in qq3 namespace. use two images in the same StatefulSet one is mongo and another is mongo-express. The following mongo-express enviromental variables should come from configset:
+Create a StatefulSet named database in qq3 namespace. use two images in the same StatefulSet one is mongo and another is mongo-express. The following mongo-express enviromental variables should come from configset: <kiv>
 
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
       ME_CONFIG_BASICAUTH: false
@@ -23,38 +23,38 @@ You should use the same secret for the following variables for mongo-express:
 
 Q3:
 
-Create a new storageset and claim 3Gi of it by the database StatefulSet you created in the last question. Also this shoud have a mountPath of /etc/mongo
+Create a new storageset and claim 3Gi of it by the database StatefulSet you created in the last question. Also this shoud have a mountPath of /etc/mongo <kiv>
 
 
 Q4:
 
-Expand the database stateful set horizontaly to 5 Replicas
+Expand the database stateful set horizontaly to 5 Replicas<kiv>
 
 
 Q5:
 
-Update your Kubeadm to v1.31.1. drain the nodes except DaemonSets and let the upgrade to be applied to enitre cluster.
+Update your Kubeadm to v1.31.1. drain the nodes except DaemonSets and let the upgrade to be applied to enitre cluster. <kiv>
 
 Q6:
 
-Deploy a pod named nginx using the nginx image in the qq3 namespace with a liveness and readiness probe for port 80.
+Deploy a pod named nginx using the nginx image in the qq3 namespace with a liveness and readiness probe for port 80. <doneD>
 
 Pod: nginx Namespace: qq3Image: nginx Liveness Probe: port: 80 Readiness Probe: port:80
 
 Q7:
 
-label your worker node to team=devops and create a deployment with an nginx image with 6 replicas in qq2 namespace to be deployed on that node. 
+label your worker node to team=devops and create a deployment with an nginx image with 6 replicas in qq2 namespace to be deployed on that node.  <done>
 
 
 
 Q8:
 
-Create a new role names examinee and bind it to entire cluster. Then create a deployment names apache use httpd image using examinee in namespace examinee
+Create a new role names examinee and bind it to entire cluster. Then create a deployment names apache use httpd image using examinee in namespace examinee <done>
 
 
 Q9:
 
-Create a new deployment names frontend and deploy it on qq4 namespace with 4 replicas. You should use httpd:latest image. Update the image to httpd:bookworm and create a backup in etcd then rollout it back again to httpd:latest. Use the etcd backup to return it to httpd:bookworm.
+Create a new deployment names frontend and deploy it on qq4 namespace with 4 replicas. You should use httpd:latest image. Update the image to httpd:bookworm and create a backup in etcd then rollout it back again to httpd:latest. Use the etcd backup to return it to httpd:bookworm. <done>
 
 
 Q10:

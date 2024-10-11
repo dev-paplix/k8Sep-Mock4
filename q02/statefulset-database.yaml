@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: qq3
+spec:
+  serviceName: "mongo"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      tolerations:
+      - key: "key1"
+        operator: "Equal"
+        value: "value1"
+        effect: "NoSchedule"
+      containers:
+      - name: mongo
+        image: mongo:latest
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
+        ports:
+        - containerPort: 27017
+          name: mongo
+      - name: mongo-express
+        image: mongo-express:latest
+        env:
+        - name: ME_CONFIG_MONGODB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_MONGODB_URL
+        - name: ME_CONFIG_BASICAUTH
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-express-config
+              key: ME_CONFIG_BASICAUTH
+        - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_USERNAME
+        - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_INITDB_ROOT_PASSWORD
+        ports:
+        - containerPort: 8081
+          name: mongo-express
