@@ -6,6 +6,58 @@ provisioner: rancher.io/local-path
 volumeBindingMode: WaitForFirstConsumer # wajib ada for dynamic volume provisioning
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv-0
+spec:
+  storageClassName: my-storage-class
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/mongo-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-sts-database-0
+spec:
+  storageClassName: my-storage-class
+  volumeName: mongo-pv-0
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-express-pv-0
+spec:
+  storageClassName: my-storage-class
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/mongo-express-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-express-sts-database-0
+spec:
+  storageClassName: my-storage-class
+  volumeName: mongo-express-pv-0
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mongo-configmap
