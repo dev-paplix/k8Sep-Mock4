@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: http
+          image: http:latest
+          ports:
+            - containerPort: 80
+
+
+controlplane $ kubectl set image deployment/frontend http=httpd:bookworm -n qq4
