@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-  namespace: qq1
 spec:
   replicas: 1
   selector:
@@ -16,8 +15,10 @@ spec:
       containers:
       - name: nginx
         image: nginx:latest
-      tolerations:
-      - key: "key1"
-        operator: "Equal"
-        value: "value1"
-        effect: "NoSchedule"
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /usr/share/nginx/html  
+      volumes:
+      - name: shared-storage
+        persistentVolumeClaim:
+          claimName: shared-pvc

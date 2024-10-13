@@ -1,20 +1,18 @@
-apiVersion: apps/v1
-kind: Deployment
 metadata:
-  name: http
-  namespace: qq8
+  name: apache
+  namespace: examinee
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: http
+      app: apache
   template:
     metadata:
       labels:
-        app: http
+        app: apache
     spec:
       containers:
-      - name: whoami
-        image: traefik/whoami
+      - name: apache
+        image: httpd:latest
         ports:
         - containerPort: 80
