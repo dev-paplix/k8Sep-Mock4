@@ -90,7 +90,7 @@ Q15:
 
 Configure Horizontal Pod Autoscaling for a Deployment to automatically scale based on CPU usage.
 
-Deployment Name: api-server
+Deployment Name: api-server \
 Namespace: production
 Replica Set: Set initially to 2 replicas.
 Container Image: nginx:1.18
