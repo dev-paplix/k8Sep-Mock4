@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: examinee-clusterrolebinding
+subjects:
+  - kind: User
+    name: examinee
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: examinee
+  apiGroup: rbac.authorization.k8s.io

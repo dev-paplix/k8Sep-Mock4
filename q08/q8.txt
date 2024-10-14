@@ -1,0 +1,17 @@
+openssl genrsa -out examinee.key 2048
+openssl req -new -key examinee.key -out examinee.csr -subj "/CN=examinee/O=dev/O=example.org"
+sudo openssl x509 -req -in examinee.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out examinee.crt -days 730
+kubectl config set-credentials examinee --client-certificate=examinee.crt --client-key=examinee.key
+kubectl config set-context examinee-kubernetes --cluster=kubernetes --user=examinee --namespace=examinee
+kubectl config use-context examinee-kubernetes
+kubectl config get-contexts
+
+vim q8-cluster-role.yaml
+kubectl apply -f q8-cluster-role.yaml
+
+vim q8-cluster-rolebinding.yaml
+kubectl apply -f q8-cluster-rolebinding.yaml
+
+kubectl create namespace examinee
+kubectl create deployment apache --image=httpd --namespace=examinee
+kubectl get pods --namespace=examinee
