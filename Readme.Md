@@ -35,7 +35,7 @@ Q5:
 
 Update your Kubeadm to v1.31.1. drain the nodes except DaemonSets and let the upgrade to be applied to enitre cluster.
 
-Q6:
+Q6: **DONE**
 
 Deploy a pod named **nginx** using the **nginx** image in the **qq3** namespace with a liveness and readiness probe for port **80**.
 
@@ -45,7 +45,7 @@ Image: **nginx**\
 Liveness Probe: port: **80** \
 Readiness Probe: port: **80** 
 
-Q7:
+Q7: **DONE**
 
 label your worker node to team=devops and create a deployment with an nginx image with 6 replicas in qq2 namespace to be deployed on that node. 
 
