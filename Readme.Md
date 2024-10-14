@@ -39,7 +39,11 @@ Q6:
 
 Deploy a pod named nginx using the nginx image in the qq3 namespace with a liveness and readiness probe for port 80.
 
-Pod: nginx Namespace: qq3Image: nginx Liveness Probe: port: 80 Readiness Probe: port:80
+Pod: nginx \
+Namespace: qq3 \
+Image: nginx \
+Liveness Probe: port: 80 \
+Readiness Probe: port:80 
 
 Q7:
 
