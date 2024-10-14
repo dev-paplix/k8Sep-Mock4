@@ -81,7 +81,7 @@ Q13:
 
 Make a deployment of an image hashicorp/terraform in qq7 namespace with no environmental variable. Let the manager know the reason of the deployment failure 
 
-Q14:
+Q14: **DONE**
 
 Create a deployment names http in the nameserver of qq8 with an image of traefik/whoami. The resource must be available from anywhere with port 8080
 
