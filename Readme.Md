@@ -90,13 +90,13 @@ Q15:
 
 Configure Horizontal Pod Autoscaling for a Deployment to automatically scale based on CPU usage.
 
-Deployment Name: api-server \
-Namespace: production \
-Replica Set: Set initially to 2 replicas. \
-Container Image: nginx:1.18 \
-CPU Target: Scale the Deployment if the average CPU usage exceeds 50%. \
-Minimum Pods: 2 \
-Maximum Pods: 5 
+Deployment Name: **api-server** \
+Namespace: **production** \
+Replica Set: Set initially to **2 replicas**. \
+Container Image: **nginx:1.18** \
+CPU Target: **Scale the Deployment if the average CPU usage exceeds 50%.** \
+Minimum Pods:**2** \
+Maximum Pods: **5** 
 
 
 Q16:
