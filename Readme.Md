@@ -1,8 +1,8 @@
 Name: muhammad syafiq bin mohd pisal
 
-Q1:
+Q1: **DONE**
 
-Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node. **Done**
+Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node.
 
 Q2:
 
@@ -99,7 +99,7 @@ Minimum Pods: **2** \
 Maximum Pods: **5** 
 
 
-Q16:
+Q16: **DONE**
 
 Create a new pod names **alpine** with an image of **alpine:edge** in **qq9** namespace. use the add the following command to the pod:\
 
