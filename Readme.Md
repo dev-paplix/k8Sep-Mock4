@@ -77,7 +77,7 @@ Create a persistent volume which has 10Gi, claim it by 3 deployments nginx:lates
 
 
 
-Q13:
+Q13: **DONE**
 
 Make a deployment of an image hashicorp/terraform in qq7 namespace with no environmental variable. Let the manager know the reason of the deployment failure 
 
