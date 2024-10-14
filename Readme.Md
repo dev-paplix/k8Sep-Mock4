@@ -2,7 +2,7 @@ Name: muhammad syafiq bin mohd pisal
 
 Q1:
 
-Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node. *Done*
+Taint your worker node to key1=value1 with NoSchedule. Create Deployment from Nginx Image in qq1 namespace and tolerate it to the worker node. #Done#
 
 Q2:
 
