@@ -37,13 +37,13 @@ Update your Kubeadm to v1.31.1. drain the nodes except DaemonSets and let the up
 
 Q6:
 
-Deploy a pod named nginx using the nginx image in the qq3 namespace with a liveness and readiness probe for port 80.
+Deploy a pod named **nginx** using the **nginx** image in the **qq3** namespace with a liveness and readiness probe for port **80**.
 
-Pod: nginx \
-Namespace: qq3 \
-Image: nginx \
-Liveness Probe: port: 80 \
-Readiness Probe: port:80 
+Pod: **nginx** \
+Namespace: **qq3** \
+Image: **nginx**\
+Liveness Probe: port: **80** \
+Readiness Probe: port: **80** 
 
 Q7:
 
