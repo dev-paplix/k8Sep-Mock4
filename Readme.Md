@@ -103,7 +103,7 @@ Q16:
 
 Create a new pod names **alpine* with an image of **alpine:edge** in **qq9** namespace. use the add the following command to the pod:\
 
-["sh", "-c", "while true; do echo 'Hello Alpine'; sleep 3; done"]\
+["sh", "-c", "while true; do echo 'Hello Alpine'; sleep 3; done"]
 
 Take a screenshot of the pod echoing 'Hello Alpine'
 
